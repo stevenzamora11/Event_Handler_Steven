@@ -10,6 +10,23 @@ type CandidateProps = CandidateType & {
 const Candidate = (props: CandidateProps) => {
     const { name, age, experience, skills, status, working, onClick } = props;
 
+    const handleCopy: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+        e.stopPropagation();
+        const plain = [
+            `Name: ${name}`,
+            `Age: ${age}`,
+            `Experience: ${experience} years`,
+            `Status: ${status}`,
+            `Skills: ${skills.join(', ')}`,
+            `Working: ${working? 'Yes' : 'No'}`,
+        ].join('\n');
+
+        navigator.clipboard
+            .writeText(plain)
+            .then(() => alert("✅ Datos copiados al portapapeles"))
+            .catch(() => alert("❌ No se pudo copiar al portapapeles"));
+    };
+
     return (
         <div
             className={cn(
@@ -50,6 +67,12 @@ const Candidate = (props: CandidateProps) => {
                     </span>
                 ))}
             </ol>
+            <button
+                onClick={handleCopy}
+                className='mt-4 w-full rounded-md bg-blue-600 px-3 py-2 text-white hover:bg-blue-700'
+            >
+                Copy data
+            </button>
         </div>
     );
 
